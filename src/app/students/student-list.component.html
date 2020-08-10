@@ -1,0 +1,66 @@
+<div class='card'>
+  <div class='card-header'>
+    {{pageTitle}}
+  </div>
+  <div class='card-body'>
+    
+    <div class='table-responsive' w-auto>
+      <table  class='table' >
+      <!-- *ngIf = 'studentsData && studentsData.length'> -->
+        <thead>
+          <tr>
+            <td>Name</td>
+            <td>Math</td>
+            <td>History</td>
+            <td>Science</td>
+            <td>English</td>
+          </tr>
+          <tr>
+            <td>
+                <input type='text' [(ngModel)]="studentName" />
+            </td>
+            <td>
+                <input type='text'  [(ngModel)]="math"/>
+            </td>
+            <td>
+                <input type='text' [(ngModel)]="history"/>
+            </td>
+            <td>
+                <input type='text' [(ngModel)]="science"/>
+            </td>
+            <td>
+                <input type='text' [(ngModel)]="english"/>
+            </td>
+            <td>
+              <button class = 'btn btn-primary' (click) = 'addStudent()' >Add student</button>
+            </td>
+          </tr>
+          <tr>
+            <th>Name</th>
+            <th>Math</th>
+            <th>History</th>
+            <th>Science</th>
+            <th>English</th>
+            <th>GPA</th>
+          </tr>
+        </thead> 
+        <tbody>
+          <ng-container *ngIf="_reload">
+          <tr *ngFor='let student of studentsData.data; let i = index;' 
+              [ngStyle]="{'background-color':getColor(i+1)}"
+              >
+            <td >{{ student.name }}</td>
+            <td >{{ student.grades[0] | slice :student.grades[0].length-1:student.grades[0].length}}</td>
+            <td>{{ student.grades[1] | slice :student.grades[1].length-1:student.grades[1].length}}</td>
+            <td>{{ student.grades[2] | slice :student.grades[2].length-1:student.grades[2].length }}</td>
+            <td >{{ student.grades[3] | slice :student.grades[3].length-1:student.grades[3].length }}</td>
+            <td>{{ calculateGPA(i+1) | number:'1.2-2'}}</td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>
