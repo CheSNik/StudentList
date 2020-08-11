@@ -1,12 +1,10 @@
-<div class='card'>
-  <div class='card-header'>
+<div class='studentList'>
+  <div class='header'>
     {{pageTitle}}
   </div>
-  <div class='card-body'>
-    
-    <div class='table-responsive' w-auto>
-      <table  class='table' >
-      <!-- *ngIf = 'studentsData && studentsData.length'> -->
+  <div class='student-body'>
+    <div class='table-responsive'>
+      <table  class="table" w-auto *ngIf = 'studentsData && studentsData.length'>
         <thead>
           <tr>
             <td>Name</td>
@@ -44,23 +42,19 @@
             <th>GPA</th>
           </tr>
         </thead> 
-        <tbody>
+        <tbody >
           <ng-container *ngIf="_reload">
-          <tr *ngFor='let student of studentsData.data; let i = index;' 
-              [ngStyle]="{'background-color':getColor(i+1)}"
-              >
+          <tr *ngFor='let student of studentsData; let i = index;' 
+          [style.background-color]="getColor(i+1)" >
             <td >{{ student.name }}</td>
-            <td >{{ student.grades[0] | slice :student.grades[0].length-1:student.grades[0].length}}</td>
-            <td>{{ student.grades[1] | slice :student.grades[1].length-1:student.grades[1].length}}</td>
-            <td>{{ student.grades[2] | slice :student.grades[2].length-1:student.grades[2].length }}</td>
-            <td >{{ student.grades[3] | slice :student.grades[3].length-1:student.grades[3].length }}</td>
+            <ng-container *ngFor='let subject of subjects;'>
+              <td>{{getGrade(student, subject)}}</td>
+            </ng-container>
             <td>{{ calculateGPA(i+1) | number:'1.2-2'}}</td>
           </tr>
-        </ng-container>
+          </ng-container>
         </tbody>
       </table>
     </div>
-
   </div>
-
 </div>

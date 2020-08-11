@@ -6,19 +6,19 @@ import { RouterModule } from '@angular/router';
 
 
 import { AppComponent } from './app.component';
-import { ProductListComponent } from './students/student-list.component';
+import { StudentListComponent } from './students/student-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ProductListComponent,
+    StudentListComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot([
-      { path: 'students', component: ProductListComponent },
+      { path: 'students', component: StudentListComponent },
       { path: '', redirectTo: 'students', pathMatch: 'full' },
       { path: '**', redirectTo: 'students', pathMatch: 'full' }
     ])

@@ -1,25 +1,24 @@
 import { Injectable } from "@angular/core";
 import {HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {Observable, throwError } from 'rxjs';
-import {catchError, tap} from 'rxjs/operators';
-
-import { Variable } from '@angular/compiler/src/render3/r3_ast';
+import {catchError, map} from 'rxjs/operators';
+import { Student } from './student';
 
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class ProductService {
+export class StudentService {
 
-    private productUrl = 'api/products/students.json'
+    private studentstUrl = 'api/students/students.json'
 
 constructor(private http: HttpClient) {  
 }
-    getProducts(): Observable<Variable> {
-    return this.http.get<Variable>(this.productUrl).pipe(
-    tap(data => console.log('All: '+ JSON.stringify(data))),
-    catchError(this.handleError)
+    getStudents(): Observable<Array<Student>> {
+    return this.http.get<Array<Student>>(this.studentstUrl).pipe(
+    map((data: any) => data.data ),
+      catchError(() => { return throwError("Data has wrong format")})
 );
     }
 

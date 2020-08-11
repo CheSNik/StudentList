@@ -1,18 +1,21 @@
 import { Component, OnInit} from '@angular/core';
-import { ProductService } from './student.services';
+import { StudentService } from './student.services';
+import { Student } from './student';
+import { stringify } from 'querystring';
 
 @Component ({
-  selector: 'pm-products',
+  selector: 'students',
 templateUrl: './student-list.component.html',
 styleUrls: ['./student-list.component.css']
 })
 
-export class ProductListComponent implements OnInit{
+export class StudentListComponent implements OnInit{
     pageTitle: string = 'Students List:';
     errorMessage: string;
-    studentsData: any;
+    studentsData: Student[] = [];
     colors = [{ status: "Max", color: "green" }, { status: "Min", color: "red" }, { status: "Default", color: "default" }]
-    public _reload = true;
+    subjects = ["Math", "History", "Science", "English"];
+    _reload = true;
 
     // This sets up from input and add to the []studentsData via addStudent() method
     studentName: string;
@@ -21,28 +24,21 @@ export class ProductListComponent implements OnInit{
     science: string;
     english: string;
     
-    private _arrGPA: number[] = [];
-    get arrGPA(): number[] {
-      return this._arrGPA;
-    }
-    set arrGPA(value: number[]) {
-      this._arrGPA.push();
-    }
+    private arrGPA: number[] = [];
     
-      constructor(private productService: ProductService) {    
+    
+      constructor(private studentService: StudentService) {    
       }
 
       ngOnInit(){
-        this.productService.getProducts().subscribe({
+        this.studentService.getStudents().subscribe({
           next: res => {this.studentsData = res;
-            this.studentsData= JSON.parse(JSON.stringify(res));
             this.collectGPA();          
         },
           error: err => this.errorMessage = err,
         });
       }
 
-      
       private reload() {
           setTimeout(() => this._reload = false);
           setTimeout(() => this._reload = true);
@@ -50,39 +46,28 @@ export class ProductListComponent implements OnInit{
 
       collectGPA() : void{
         this.arrGPA.splice(0,this.arrGPA.length)
-        for (let i=1; i<=this.studentsData.data.length;i++)
+        for (let i=1; i<=this.studentsData.length;i++)
         {
           this.arrGPA.push(this.calculateGPA(i));
         }
       }
 
       calculateGPA(_id: number) : number {
-      let counter =0;
       let sum=0;
-      this.studentsData.data[_id-1].grades.forEach(element => { 
-        if (element.substring(element.length-1, element.length).toLocaleUpperCase()==='A'){
+      let student = this.studentsData[_id-1];
+      student.grades.forEach(grade => { 
+        if (grade.split(" ",3)[2].toLocaleUpperCase()==='A')
           sum = sum+4;
-          counter++;
-        }
-        else if (element.substring(element.length-1, element.length).toLocaleUpperCase()==='B'){
-          sum = sum+3;
-          counter++;
-        }
-        else if (element.substring(element.length-1, element.length).toLocaleUpperCase()==='C'){
-          sum = sum+2;
-          counter++;
-        }
-        else if (element.substring(element.length-1, element.length).toLocaleUpperCase()==='D'){
-          sum = sum+1;
-          counter++;
-        }
-        else if (element.substring(element.length-1, element.length).toLocaleUpperCase()==='F'){
-          sum = sum+0;
-          counter++;
-        }
-    });
-      return sum/counter;
-      }
+        else if (grade.split(" ",3)[2].toLocaleUpperCase()==='B')
+          sum +=3;
+        else if (grade.split(" ",3)[2].toLocaleUpperCase()==='C')
+          sum +=2;
+        else if (grade.split(" ",3)[2].toLocaleUpperCase()==='D')
+          sum +=1;
+        
+      });
+      return sum/this.subjects.length;
+    }
 
       getColor(_id) {
         let status = "Default";
@@ -92,29 +77,36 @@ export class ProductListComponent implements OnInit{
         return this.colors.filter(item => item.status === status)[0].color 
      }
 
+     getGrade(student : Student, subject: string): string {
+      let result = null;  
+      student.grades.forEach(item => {
+          if(item.split(" ",1)[0] === subject)
+          result= item.split(" ",3)[2];
+        });
+      return result;
+     }
+
       isMaxGPA(i) : boolean{
-        if(this.arrGPA[i-1]===Math.max(...this.arrGPA)){
+        if(this.arrGPA[i-1]===Math.max(...this.arrGPA))
           return true ;
-        }
-        else {
-          return false ;
-        }
+        
       }
 
       isMinGPA(i) : boolean{
-        if(this.arrGPA[i-1]===Math.min(...this.arrGPA)){
-          return true ;
-        }
-        else {
-          return false ;
-        }
+        if(this.arrGPA[i-1]===Math.min(...this.arrGPA))
+          return true;
       }
 
       addStudent() : void{
-        this.studentsData.data.push({
-          "_id": this.studentsData.data.length+1,
+        this.studentsData.push({
+          "_id": this.studentsData.length+1,
           "name": this.studentName,
           "grades": [this.math, this.history, this.science, this.english],
+          "img" : "",
+          "gender": "",
+          "birthday" : "",
+          "athlete": null,
+          "grade" : 0
         })
         this.studentName='';
         this.math ='';
