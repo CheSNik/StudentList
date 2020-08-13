@@ -1,10 +1,12 @@
-<div class='studentList'>
+<div class='container'>
+  <form #form="ngForm"  name="form" id="form">
   <div class='header'>
     {{pageTitle}}
   </div>
-  <div class='student-body'>
+  <br>
+  <div class="form-group">
     <div class='table-responsive'>
-      <table  class="table" w-auto *ngIf = 'studentsData && studentsData.length'>
+      <table  class="form" w-auto *ngIf = 'studentsData && studentsData.length'>
         <thead>
           <tr>
             <td>Name</td>
@@ -13,24 +15,33 @@
             <td>Science</td>
             <td>English</td>
           </tr>
+          <!-- <h6>{{form.value | json}}</h6>
+          <h6>{{form.valid}}</h6>
+          <h6>{{form.pristine}}</h6>
+          <h6>{{nameField.valid}}</h6> -->
           <tr>
             <td>
-                <input type='text' [(ngModel)]="studentName" />
+                <input id="name" class="form-control" 
+                name="name" placeholder="student's Name"
+                [(ngModel)]="studentName" 
+                required #nameField="ngModel"
+                pattern="[a-zA-Z]+"
+                >
             </td>
             <td>
-                <input type='text'  [(ngModel)]="math"/>
+                <input class="form-control"  name="Math" placeholder="A,B,C,D or F"  [(ngModel)]="math" pattern="[A-F]" maxlength="1" required/>
             </td>
             <td>
-                <input type='text' [(ngModel)]="history"/>
+                <input class="form-control"  name="History" placeholder="A,B,C,D or F" [(ngModel)]="history" pattern="[A-F]" maxlength="1" required/>
             </td>
             <td>
-                <input type='text' [(ngModel)]="science"/>
+                <input class="form-control"  name="Science" placeholder="A,B,C,D or F" [(ngModel)]="science" pattern="[A-F]" maxlength="1" required/>
             </td>
             <td>
-                <input type='text' [(ngModel)]="english"/>
+                <input class="form-control"  name="English" placeholder="A,B,C,D or F" [(ngModel)]="english" pattern="[A-F]" maxlength="1" required/>
             </td>
             <td>
-              <button class = 'btn btn-primary' (click) = 'addStudent()' >Add student</button>
+              <button class = 'btn btn-primary btn-sm' (click) = 'addStudent(form.valid)' >Add student</button>
             </td>
           </tr>
           <tr>
@@ -57,4 +68,5 @@
       </table>
     </div>
   </div>
+</form>
 </div>

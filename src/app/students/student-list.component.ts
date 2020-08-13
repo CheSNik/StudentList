@@ -2,6 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { StudentService } from './student.services';
 import { Student } from './student';
 import { stringify } from 'querystring';
+import { NgForm } from '@angular/forms';
 
 @Component ({
   selector: 'students',
@@ -10,19 +11,20 @@ styleUrls: ['./student-list.component.css']
 })
 
 export class StudentListComponent implements OnInit{
-    pageTitle: string = 'Students List:';
+    pageTitle: string = 'Internship Coding Challenge by RipeMetrics';
     errorMessage: string;
     studentsData: Student[] = [];
-    colors = [{ status: "Max", color: "green" }, { status: "Min", color: "red" }, { status: "Default", color: "default" }]
+    colors = [{ status: "Max", color: "#81F781" }, { status: "Min", color: "#FA5858" }, { status: "Default", color: "default" }]
     subjects = ["Math", "History", "Science", "English"];
     _reload = true;
+    form: NgForm;
 
     // This sets up from input and add to the []studentsData via addStudent() method
-    studentName: string;
-    math: string;
-    history: string;
-    science: string;
-    english: string;
+    studentName: string = null;
+    math: string = null;
+    history: string = null;
+    science: string = null;
+    english: string = null;
     
     private arrGPA: number[] = [];
     
@@ -54,18 +56,18 @@ export class StudentListComponent implements OnInit{
 
       calculateGPA(_id: number) : number {
       let sum=0;
+      let increment=0;
       let student = this.studentsData[_id-1];
-      student.grades.forEach(grade => { 
-        if (grade.split(" ",3)[2].toLocaleUpperCase()==='A')
-          sum = sum+4;
-        else if (grade.split(" ",3)[2].toLocaleUpperCase()==='B')
-          sum +=3;
-        else if (grade.split(" ",3)[2].toLocaleUpperCase()==='C')
-          sum +=2;
-        else if (grade.split(" ",3)[2].toLocaleUpperCase()==='D')
-          sum +=1;
-        
-      });
+      student.grades.forEach(item => { 
+          switch(item.split(" ",3)[2]){
+            case 'A': increment=4;break;
+            case 'B': increment=3;break;
+            case 'C': increment=2;break;
+            case 'D': increment=1;break;
+            default : increment=0;
+          }
+          sum+=increment;
+        });
       return sum/this.subjects.length;
     }
 
@@ -97,26 +99,35 @@ export class StudentListComponent implements OnInit{
           return true;
       }
 
-      addStudent() : void{
-        this.studentsData.push({
-          "_id": this.studentsData.length+1,
-          "name": this.studentName,
-          "grades": [this.math, this.history, this.science, this.english],
-          "img" : "",
-          "gender": "",
-          "birthday" : "",
-          "athlete": null,
-          "grade" : 0
-        })
-        this.studentName='';
-        this.math ='';
-        this.history='';
-        this.science='';
-        this.english='';
-        this.collectGPA();
+      addStudent(isFormValid: boolean) : void{
 
-        this.reload();
-        
+        if(isFormValid){
+          this.studentsData.push({
+            "_id": this.studentsData.length+1,
+            "name": this.studentName,
+            "grades": ["Math - "+this.math, "History - "+this.history, "Science - "+this.science, "English - "+this.english],
+            "img" : "",
+            "gender": "",
+            "birthday" : "",
+            "athlete": null,
+            "grade" : 0
+          })
+          this.collectGPA();
+          this.reload();
+          this.resetForm();
+        }
+
       }
+
+      resetForm(){
+        setTimeout(() => {
+          this.studentName = null,
+          this.math = null;
+          this.history = null;
+          this.science = null;
+          this.english = null;
+        }, 100);
+      }
+      
       
 }
