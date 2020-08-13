@@ -1,7 +1,15 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self';font-src 'self'; img-src 'self' data: https:; style-src 'self' ; script-src 'self'">
+  <meta name="viewport" charset="utf-8" content="width=device-width">
+  <meta http-equiv="Content-Security-Policy" 
+        content="default-src 'self' data: gap: 'unsafe-eval' ws: ; 
+        style-src 'self' 'unsafe-inline'; 
+        script-src https: *.example.com ;
+        media-src 'none'; 
+        font-src *;
+        connect-src *;
+        img-src 'self' data: content:;">
   <title>Student list</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
