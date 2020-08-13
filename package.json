@@ -1,5 +1,5 @@
 {
-  "name": "apm",
+  "name": "APM",
   "version": "0.0.0",
   "engines": {
     "node": "12.18.1",
@@ -7,7 +7,7 @@
   },
   "scripts": {
     "ng": "ng",
-    "start": "server.js",
+    "start": "server.jsng",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

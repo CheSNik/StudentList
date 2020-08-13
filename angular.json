@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "apm": {
+    "APM": {
       "projectType": "application",
       "schematics": {},
       "root": "",
